@@ -27,7 +27,7 @@ const INK_PRIMARY = '#1d1d1f';
 const INK_SECONDARY = '#86868b';
 
 const IMAGES = {
-  LOGO: 'input_file_8.png',
+  LOGO: '白.png',
   CAMPUS_MODEL: 'input_file_0.png',
   BASEMENT_ENTRY: 'input_file_1.png',
   SHUTTLE_BUS: 'input_file_2.png',
