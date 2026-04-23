@@ -1,0 +1,131 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500&display=swap');
+@import url('https://api.fontshare.com/v2/css?f[]=general-sans@200,300,400,500,600,700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "General Sans", "Inter", "MiSans", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+  
+  --color-brand: #bf1a20;
+  --color-ink: #333333; 
+  --color-ink-secondary: #666666; 
+  --color-surface: #ffffff; 
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+  body {
+    @apply text-ink bg-white selection:bg-brand/10 selection:text-brand;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11", "kern";
+  }
+}
+
+@layer components {
+  .apple-container {
+    @apply max-w-[1060px] mx-auto px-6 md:px-12;
+  }
+  
+  .sticky-nav {
+    @apply sticky top-0 z-50 w-full backdrop-blur-md bg-white/70 border-b border-black/[0.05] transition-all duration-500;
+  }
+
+  .apple-button {
+    @apply inline-flex items-center justify-center px-6 py-2 rounded-full text-sm font-medium transition-all duration-300;
+  }
+}
+
+@keyframes text-gradient {
+  to {
+    background-position: 200% center;
+  }
+}
+
+.animate-text-gradient {
+  animation: text-gradient 8s linear infinite;
+}
+
+.text-reveal {
+  @apply bg-clip-text text-transparent bg-gradient-to-b from-[#333333] to-[#333333]/40;
+}
+
+  .text-gradient {
+  @apply bg-clip-text text-transparent bg-gradient-to-b from-ink to-ink/60;
+}
+
+.text-gradient-red {
+  @apply bg-clip-text text-transparent bg-gradient-to-r from-brand to-[#ff4d4d];
+}
+
+.bg-mesh {
+  background-image: 
+    radial-gradient(at 0% 0%, rgba(191, 26, 32, 0.03) 0, transparent 50%), 
+    radial-gradient(at 50% 0%, rgba(191, 26, 32, 0.05) 0, transparent 50%), 
+    radial-gradient(at 100% 0%, rgba(191, 26, 32, 0.03) 0, transparent 50%);
+}
+
+.bg-dot-grid {
+  background-image: radial-gradient(rgba(0, 0, 0, 0.1) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+@keyframes slow-pan {
+  from { background-position: 0 0; }
+  to { background-position: 40px 40px; }
+}
+
+.animate-slow-pan {
+  animation: slow-pan 20s linear infinite;
+}
+
+@keyframes glow {
+  0%, 100% { opacity: 0.3; transform: scale(1); }
+  50% { opacity: 0.6; transform: scale(1.1); }
+}
+
+@keyframes dash {
+  to {
+    stroke-dashoffset: -1000;
+  }
+}
+
+.animate-dash {
+  animation: dash 60s linear infinite;
+}
+
+@keyframes pulse-slow {
+  0%, 100% { opacity: 0.1; }
+  50% { opacity: 0.3; }
+}
+
+.animate-pulse-slow {
+  animation: pulse-slow 4s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+/* Custom scrollbar for premium feel */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+::-webkit-scrollbar-thumb {
+  background: #d2d2d7;
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #86868b;
+}

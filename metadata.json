@@ -1,0 +1,6 @@
+{
+  "name": "玄刃科技參訪指引",
+  "description": "一家領先的實驗室智慧自動化平台，為訪客提供直觀且有趣的入園指引與科技感展示。",
+  "requestFramePermissions": ["geolocation"],
+  "majorCapabilities": []
+}
