@@ -20,8 +20,6 @@ import {
   Navigation,
   ChevronDown
 } from 'lucide-react';
-import Logo from './assets/白.png';
-import ICON from './assets/导入引物.png';
 
 // --- Constants & Assets ---
 const BRAND_RED = '#bf1a20';
@@ -30,14 +28,16 @@ const INK_SECONDARY = '#86868b';
 
 const IMAGES = {
   // LOGO: '白.png',
-  LOGO: Logo,
+  // LOGO: Logo,
+  LOGO: '/images/白.png',
   CAMPUS_MODEL: 'input_file_0.png',
   BASEMENT_ENTRY: 'input_file_1.png',
   SHUTTLE_BUS: 'input_file_2.png',
   SUBWAY_EXIT: 'input_file_3.png',
   SHUTTLE_SCHEDULE: 'input_file_4.png',
   // QR_CODE: 'input_file_6.png',
-  QR_CODE: ICON,
+  // QR_CODE: ICON,
+  QR_CODE: '/images/导入引物.png',
   PRODUCT_SHOW: 'https://images.unsplash.com/photo-1581092580497-e0d23cbdf1dc?auto=format&fit=crop&q=80&w=1000', 
   WEB3_HERO_VIDEO: 'https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260217_030345_246c0224-10a4-422c-b324-070b7c0eceda.mp4'
 };
