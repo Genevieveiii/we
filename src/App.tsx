@@ -37,7 +37,7 @@ const IMAGES = {
   SHUTTLE_SCHEDULE: 'input_file_4.png',
   // QR_CODE: 'input_file_6.png',
   // QR_CODE: ICON,
-  QR_CODE: '/images/导入引物.png',
+  QR_CODE: '/images/20260422-150401.jpeg',
   PRODUCT_SHOW: 'https://images.unsplash.com/photo-1581092580497-e0d23cbdf1dc?auto=format&fit=crop&q=80&w=1000', 
   WEB3_HERO_VIDEO: 'https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260217_030345_246c0224-10a4-422c-b324-070b7c0eceda.mp4'
 };
@@ -85,6 +85,15 @@ const fadeScaleVariants = {
   }
 };
 
+// --- 时刻表结构化数据 ---
+const SH_DATA = {
+  morning: [
+    { range: "8:10-8:40", times: ["8:10", "8:25", "8:40", "8:55"] },
+    { range: "9:10-9:45", times: ["9:10", "9:25", "9:35", "9:45"] }
+  ],
+  evening: ["18:10", "18:25", "18:40", "18:55", "19:10", "19:25"],
+  offPeak: ["10:00", "10:30", "11:00", "12:00", "12:30", "13:00", "13:30", "14:00", "14:30", "15:00", "15:30", "16:00", "16:30", "17:00", "17:30"]
+};
 export default function App() {
   const [currentScreen, setCurrentScreen] = useState<Screen>('landing');
   const [showSchedule, setShowSchedule] = useState(false);
@@ -224,7 +233,7 @@ export default function App() {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-10 pb-20">
                 {[
                   { id: 'driving', icon: Car, label: '驾车前往', sub: 'Driving', desc: '规划路径与停车指引' },
-                  { id: 'subway', icon: TrainFront, label: '地铁/接驳车', sub: 'Subway & Shuttle', desc: '便捷的大型交通中转' },
+                  { id: 'subway', icon: TrainFront, label: '地铁/班车', sub: 'Subway & Shuttle', desc: '便捷的大型交通中转' },
                   { id: 'ridehailing', icon: Smartphone, label: '网约出租车', sub: 'Ride-Hailing', desc: '点对点精确落地服务' },
                 ].map((item, idx) => (
                   <motion.button 
@@ -339,12 +348,67 @@ export default function App() {
       {/* Schedule Modal */}
       <AnimatePresence>
         {showSchedule && (
-          <motion.div 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-xl"
-            onClick={() => setShowSchedule(false)}
+         <motion.div 
+  className="bg-white rounded-[3rem] overflow-hidden max-w-2xl w-full relative flex flex-col max-h-[80vh]"
+  onClick={e => e.stopPropagation()}
+>
+  {/* Modal Header */}
+  <div className="p-8 border-b border-gray-50 flex justify-between items-center bg-white sticky top-0">
+    <div>
+      <h5 className="text-2xl font-bold">班车安排表</h5>
+      <p className="text-[10px] text-brand font-bold tracking-widest uppercase">13号线中科路站 ↔ 玄刃科技</p>
+    </div>
+    <button onClick={() => setShowSchedule(false)} className="p-3 bg-gray-100 rounded-full hover:bg-brand hover:text-white transition-all">
+      <ChevronLeft className="w-5 h-5 rotate-[270deg]" />
+    </button>
+  </div>
+
+  {/* Modal Body */}
+  <div className="flex-1 overflow-y-auto p-8 space-y-8">
+    <section>
+      <div className="text-[10px] font-bold text-gray-400 mb-4 tracking-widest uppercase italic">Morning Peaks 早高峰</div>
+      <div className="space-y-4">
+        {SH_DATA.morning.map((m, i) => (
+          <div key={i} className="grid grid-cols-4 gap-2">
+            {m.times.map(t => (
+              <div key={t} className={`py-2 rounded-xl text-center text-sm font-bold border ${nextBusInfo?.time === t ? 'bg-brand text-white border-brand' : 'bg-gray-50 text-gray-600 border-transparent'}`}>
+                {t}
+              </div>
+            ))}
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <div className="grid grid-cols-2 gap-8">
+      <section>
+        <div className="text-[10px] font-bold text-gray-400 mb-4 tracking-widest uppercase italic">Off-Peak 平峰</div>
+        <div className="grid grid-cols-2 gap-2">
+          {SH_DATA.offPeak.map(t => (
+            <div key={t} className={`py-2 rounded-lg text-center text-xs font-mono border ${nextBusInfo?.time === t ? 'bg-brand text-white border-brand' : 'bg-gray-50 text-gray-400 border-transparent'}`}>
+              {t}
+            </div>
+          ))}
+        </div>
+      </section>
+      <section>
+        <div className="text-[10px] font-bold text-gray-400 mb-4 tracking-widest uppercase italic">Evening Peaks 晚高峰</div>
+        <div className="grid grid-cols-2 gap-2">
+          {SH_DATA.evening.map(t => (
+            <div key={t} className={`py-2 rounded-lg text-center text-xs font-mono border ${nextBusInfo?.time === t ? 'bg-brand text-white border-brand' : 'bg-brand/5 text-brand border-brand/20'}`}>
+              {t}
+            </div>
+          ))}
+        </div>
+      </section>
+    </div>
+    
+    <div className="p-6 bg-gray-50 rounded-[2rem] text-[11px] text-gray-400 font-light leading-relaxed">
+      <p>• 运行时间约15分钟，建议提前5分钟候车</p>
+      <p>• 晚高峰 17:30 班次到达中科路后不返回园区</p>
+    </div>
+  </div>
+</motion.div>
           >
             <motion.div 
               initial={{ opacity: 0, scale: 0.9, y: 20 }}
@@ -381,6 +445,39 @@ export default function App() {
 
 function DetailsScreen({ type, onBack, onNext, onShowSchedule }: { type: 'driving'|'subway'|'ridehailing', onBack:()=>void, onNext:()=>void, onShowSchedule:()=>void }) {
   const [shuttleStatus, setShuttleStatus] = useState('巴士行驶中');
+
+  // --- 新增：倒计时逻辑 ---
+  const [nextBusInfo, setNextBusInfo] = useState(null);
+
+  useEffect(() => {
+    const calculateNextBus = () => {
+      const now = new Date();
+      if (now.getDay() === 0 || now.getDay() === 6) return; // 周末不计
+
+      const currentTime = now.getHours() * 60 + now.getMinutes();
+      // 展平所有时间点
+      const allTimes = [
+        ...SH_DATA.morning.flatMap(m => m.times),
+        ...SH_DATA.offPeak,
+        ...SH_DATA.evening
+      ];
+
+      const upcoming = allTimes
+        .map(t => {
+          const [h, m] = t.split(':').map(Number);
+          return { string: t, minutes: h * 60 + m };
+        })
+        .find(t => t.minutes > currentTime);
+
+      if (upcoming) {
+        setNextBusInfo({ time: upcoming.string, countdown: upcoming.minutes - currentTime });
+      }
+    };
+
+    calculateNextBus();
+    const timer = setInterval(calculateNextBus, 30000); // 30秒更新一次
+    return () => clearInterval(timer);
+  }, []);
 
   useEffect(() => {
     if (type !== 'subway') return;
@@ -459,26 +556,40 @@ function DetailsScreen({ type, onBack, onNext, onShowSchedule }: { type: 'drivin
             title: "城市网邻专属接驳车",
             desc: "认准「浦东公交」与「城市网邻」字样。车次约每 15 分钟一班。",
             custom: (
-              <div className="space-y-4">
-                <div className="grid grid-cols-2 gap-4 h-full aspect-video">
-                  <div className="bg-surface rounded-3xl overflow-hidden flex items-center justify-center p-4">
-                    <img src={IMAGES.SHUTTLE_BUS} alt="Bus" className="h-full object-contain" />
-                  </div>
-                  <div className="bg-surface rounded-3xl overflow-hidden">
-                    <img src={IMAGES.SUBWAY_EXIT} alt="Stop" className="w-full h-full object-cover" />
-                  </div>
-                </div>
-                <div className="flex items-center gap-3 px-6 py-4 bg-brand/5 rounded-2xl border border-brand/10">
-                   <div className="relative flex">
-                      <div className="w-2.5 h-2.5 bg-brand rounded-full"></div>
-                      <div className="absolute w-2.5 h-2.5 bg-brand rounded-full animate-ping"></div>
-                   </div>
-                   <div className="flex flex-col">
-                      <span className="text-[10px] text-brand/60 font-bold uppercase tracking-widest leading-none mb-1">Live Status</span>
-                      <span className="text-sm font-bold text-brand">{shuttleStatus}</span>
-                   </div>
-                </div>
-              </div>
+              custom: (
+  <div className="space-y-4">
+    <div className="grid grid-cols-2 gap-4 aspect-video">
+      <div className="bg-surface rounded-3xl flex items-center justify-center p-4">
+        <img src={IMAGES.SHUTTLE_BUS} alt="Bus" className="h-full object-contain" />
+      </div>
+      <div className="bg-surface rounded-3xl overflow-hidden cursor-pointer" onClick={onShowSchedule}>
+        <img src={IMAGES.SHUTTLE_SCHEDULE} alt="Schedule" className="w-full h-full object-cover" />
+      </div>
+    </div>
+    
+    {/* 动态倒计时卡片 */}
+    <div className="flex items-center gap-4 px-6 py-5 bg-brand/5 rounded-[2rem] border border-brand/10">
+      <div className="relative flex">
+        <div className="w-2.5 h-2.5 bg-brand rounded-full"></div>
+        <div className="absolute w-2.5 h-2.5 bg-brand rounded-full animate-ping"></div>
+      </div>
+      <div className="flex-1 flex justify-between items-center">
+        <div className="flex flex-col">
+          <span className="text-[10px] text-brand/60 font-bold uppercase tracking-widest leading-none mb-1">Next Shuttle</span>
+          <span className="text-lg font-bold text-brand font-mono">{nextBusInfo ? nextBusInfo.time : "运营结束"}</span>
+        </div>
+        {nextBusInfo && (
+          <div className="text-right">
+            <div className="text-[10px] text-gray-400 font-bold uppercase mb-1">预计等待</div>
+            <div className="text-2xl font-black text-ink tracking-tighter">
+              {nextBusInfo.countdown}<span className="text-xs ml-1">MIN</span>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  </div>
+),
             ),
             button: { label: "查看班车时刻表", onClick: onShowSchedule }
           }
