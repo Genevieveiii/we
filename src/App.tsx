@@ -97,6 +97,49 @@ const SH_DATA = {
 export default function App() {
   const [currentScreen, setCurrentScreen] = useState<Screen>('landing');
   const [showSchedule, setShowSchedule] = useState(false);
+
+// --- 统一的时间管理状态 ---
+  const [nextBusInfo, setNextBusInfo] = useState<{time: string, countdown: number} | null>(null);
+
+  useEffect(() => {
+    const calculateNextBus = () => {
+      const now = new Date();
+      // 这里的 getDay() === 0 || 6 是判断周末，如果你需要周末也显示，可以注释掉这行
+      if (now.getDay() === 0 || now.getDay() === 6) return; 
+
+      const currentTime = now.getHours() * 60 + now.getMinutes();
+      
+      // 展平所有时间点
+      const allTimes = [
+        ...SH_DATA.morning.flatMap(m => m.times),
+        ...SH_DATA.offPeak,
+        ...SH_DATA.evening
+      ];
+
+      const upcoming = allTimes
+        .map(t => {
+          const [h, m] = t.split(':').map(Number);
+          return { string: t, minutes: h * 60 + m };
+        })
+        .find(t => t.minutes > currentTime);
+
+      if (upcoming) {
+        setNextBusInfo({ 
+          time: upcoming.string, 
+          countdown: upcoming.minutes - currentTime 
+        });
+      } else {
+        setNextBusInfo(null); // 全天班车已结束
+      }
+    };
+
+    calculateNextBus();
+    const timer = setInterval(calculateNextBus, 30000); // 每30秒更新一次
+    return () => clearInterval(timer);
+  }, []);
+
+  //
+  
   const { scrollYProgress } = useScroll();
 
   useEffect(() => {
@@ -270,6 +313,7 @@ export default function App() {
             onBack={() => navTo('selection')} 
             onNext={() => navTo('ending')}
             onShowSchedule={() => setShowSchedule(true)}
+            nextBusInfo={nextBusInfo} //
           />
         )}
 
@@ -334,7 +378,7 @@ export default function App() {
             </main>
 
             <footer className="mt-24 pt-12 border-t border-black/5 flex flex-col md:flex-row justify-between gap-6 text-[10px] uppercase tracking-widest text-ink-secondary font-mono max-w-7xl mx-auto w-full">
-              <div>© 2024 XRAZOR TECHNOLOGY. ALL RIGHTS RESERVED.</div>
+              <div>© 2026 XRAZOR TECHNOLOGY. ALL RIGHTS RESERVED.</div>
               <div className="flex gap-8">
                 <span>Innovation</span>
                 <span>Precision</span>
@@ -442,13 +486,15 @@ export default function App() {
 
 // --- Helper Components ---
 
-function DetailsScreen({ type, onBack, onNext, onShowSchedule }: { type: 'driving'|'subway'|'ridehailing', onBack:()=>void, onNext:()=>void, onShowSchedule:()=>void }) {
+function DetailsScreen({ type, onBack, onNext, onShowSchedule }: { type: 'driving'|'subway'|'ridehailing', onBack:()=>void, onNext:()=>void, onShowSchedule:()=>void,
+  nextBusInfo: any // }) {
   const [shuttleStatus, setShuttleStatus] = useState('巴士行驶中');
 
   // --- 新增：倒计时逻辑 ---
   const [nextBusInfo, setNextBusInfo] = useState(null);
 
   useEffect(() => {
+    if (type !== 'subway') return;
     const calculateNextBus = () => {
       const now = new Date();
       if (now.getDay() === 0 || now.getDay() === 6) return; // 周末不计
@@ -502,25 +548,6 @@ function DetailsScreen({ type, onBack, onNext, onShowSchedule }: { type: 'drivin
     // Destination address: 上海市浦东新区昌飞路186号
     const destination = encodeURIComponent("上海市浦东新区昌飞路186号玄刃科技");
     
-    // Attempt to use Geolocation API to confirm permission first, 
-    // although map apps handle "current location" well.
-    if ("geolocation" in navigator) {
-      navigator.geolocation.getCurrentPosition(
-        () => {
-          // Success getting permission - open Baidu or Amap
-          // We use a universal direct link to Amap/Baidu for the region
-          window.open(`https://uri.amap.com/navigation?to=,,${destination}&mode=car&policy=1&src=web&callnative=1`, '_blank');
-        },
-        (error) => {
-          console.error("Geolocation error:", error);
-          // Fallback to just opening map with destination even if geolocation fails
-          window.open(`https://www.google.com/maps/dir/?api=1&destination=${destination}`, '_blank');
-        }
-      );
-    } else {
-      window.open(`https://www.google.com/maps/dir/?api=1&destination=${destination}`, '_blank');
-    }
-  };
 
   const content = {
     driving: {
@@ -553,9 +580,8 @@ function DetailsScreen({ type, onBack, onNext, onShowSchedule }: { type: 'drivin
           {
             tag: "SHUTTLE BUS",
             title: "城市网邻专属接驳车",
-            desc: "认准「浦东公交」与「城市网邻」字样。车次约每 15 分钟一班。",
+            desc: "认准「浦东公交」与「城市网邻」字样。车次参考时间表。",
             custom: (
-              custom: (
   <div className="space-y-4">
     <div className="grid grid-cols-2 gap-4 aspect-video">
       <div className="bg-surface rounded-3xl flex items-center justify-center p-4">
