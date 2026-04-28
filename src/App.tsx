@@ -30,11 +30,11 @@ const IMAGES = {
   // LOGO: '白.png',
   // LOGO: Logo,
   LOGO: '/images/白.png',
-  CAMPUS_MODEL: 'input_file_0.png',
+  CAMPUS_MODEL: '/images/汽车指引.png',
   BASEMENT_ENTRY: '/images/地图指引.png',
-  SHUTTLE_BUS: 'input_file_2.png',
-  SUBWAY_EXIT: '/images/地铁指引.png',
-  SHUTTLE_SCHEDULE: 'input_file_4.png',
+  SHUTTLE_BUS: '/images/地铁指引.png',
+  SUBWAY_EXIT: '/images/班车下车后指引.png',
+  SHUTTLE_SCHEDULE: '/images/班车下车后指引.png',
   // QR_CODE: 'input_file_6.png',
   // QR_CODE: ICON,
   QR_CODE: '/images/20260422-150401.jpeg',
@@ -556,7 +556,7 @@ function DetailsScreen({ type, onBack, onNext, onShowSchedule }: { type: 'drivin
          {
            tag: "DESTINATION",
            title: "浦东新区昌飞路 186 号",
-           desc: "请导航至「3 号楼裙楼」，建议从「城市网邻北門」進入地下室。",
+           desc: "请导航至「上海城市网邻」，建议从「城市网邻北門」進入地下室。",
            img: IMAGES.CAMPUS_MODEL
          },
          {
