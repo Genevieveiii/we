@@ -5,13 +5,13 @@
 
 import { useState, ReactNode, useEffect } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform } from 'motion/react';
-import { 
-  Car, 
-  TrainFront, 
-  ChevronRight, 
-  MapPin, 
-  Info, 
-  Map as MapIcon, 
+import {
+  Car,
+  TrainFront,
+  ChevronRight,
+  MapPin,
+  Info,
+  Map as MapIcon,
   Bus,
   ArrowRight,
   ExternalLink,
@@ -35,10 +35,11 @@ const IMAGES = {
   SHUTTLE_BUS: '/images/地铁指引.png',
   SUBWAY_EXIT: '/images/班车下车后指引.png',
   SHUTTLE_SCHEDULE: '/images/班车下车后指引.png',
+  basement: '/images/车库入口.png',
   // QR_CODE: 'input_file_6.png',
   // QR_CODE: ICON,
   QR_CODE: '/images/20260422-150401.jpeg',
-  PRODUCT_SHOW: 'https://images.unsplash.com/photo-1581092580497-e0d23cbdf1dc?auto=format&fit=crop&q=80&w=1000', 
+  PRODUCT_SHOW: 'https://images.unsplash.com/photo-1581092580497-e0d23cbdf1dc?auto=format&fit=crop&q=80&w=1000',
   WEB3_HERO_VIDEO: 'https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260217_030345_246c0224-10a4-422c-b324-070b7c0eceda.mp4'
 };
 
@@ -69,19 +70,19 @@ const itemVariants = {
   visible: {
     opacity: 1,
     y: 0,
-    transition: { 
-      duration: 0.8, 
-      ease: [0.16, 1, 0.3, 1] 
+    transition: {
+      duration: 0.8,
+      ease: [0.16, 1, 0.3, 1]
     }
   }
 };
 
 const fadeScaleVariants = {
   hidden: { opacity: 0, scale: 0.98 },
-  visible: { 
-    opacity: 1, 
-    scale: 1, 
-    transition: { duration: 1.2, ease: [0.16, 1, 0.3, 1] } 
+  visible: {
+    opacity: 1,
+    scale: 1,
+    transition: { duration: 1.2, ease: [0.16, 1, 0.3, 1] }
   }
 };
 
@@ -98,17 +99,17 @@ export default function App() {
   const [currentScreen, setCurrentScreen] = useState<Screen>('landing');
   const [showSchedule, setShowSchedule] = useState(false);
 
-// --- 统一的时间管理状态 ---
-  const [nextBusInfo, setNextBusInfo] = useState<{time: string, countdown: number} | null>(null);
+  // --- 统一的时间管理状态 ---
+  const [nextBusInfo, setNextBusInfo] = useState<{ time: string, countdown: number } | null>(null);
 
   useEffect(() => {
     const calculateNextBus = () => {
       const now = new Date();
       // 这里的 getDay() === 0 || 6 是判断周末，如果你需要周末也显示，可以注释掉这行
-      if (now.getDay() === 0 || now.getDay() === 6) return; 
+      if (now.getDay() === 0 || now.getDay() === 6) return;
 
       const currentTime = now.getHours() * 60 + now.getMinutes();
-      
+
       // 展平所有时间点
       const allTimes = [
         ...SH_DATA.morning.flatMap(m => m.times),
@@ -124,9 +125,9 @@ export default function App() {
         .find(t => t.minutes > currentTime);
 
       if (upcoming) {
-        setNextBusInfo({ 
-          time: upcoming.string, 
-          countdown: upcoming.minutes - currentTime 
+        setNextBusInfo({
+          time: upcoming.string,
+          countdown: upcoming.minutes - currentTime
         });
       } else {
         setNextBusInfo(null); // 全天班车已结束
@@ -139,7 +140,7 @@ export default function App() {
   }, []);
 
   //
-  
+
   const { scrollYProgress } = useScroll();
 
   useEffect(() => {
@@ -154,7 +155,7 @@ export default function App() {
       {currentScreen !== 'landing' && (
         <nav className="sticky top-0 z-[100] w-full bg-white/80 backdrop-blur-xl">
           <div className="max-w-[1060px] mx-auto px-6 h-12 flex items-center justify-center">
-            <motion.button 
+            <motion.button
               onClick={() => navTo('landing')}
               className="text-sm font-bold tracking-tight hover:opacity-70 transition-opacity flex items-center gap-2"
             >
@@ -167,8 +168,8 @@ export default function App() {
 
       <AnimatePresence mode="wait">
         {currentScreen === 'landing' && (
-          <motion.div 
-            key="landing" 
+          <motion.div
+            key="landing"
             variants={containerVariants}
             initial="hidden"
             animate="visible"
@@ -177,34 +178,34 @@ export default function App() {
           >
             {/* Fullscreen Video Background */}
             <div className="absolute inset-0 z-0">
-               <video 
-                autoPlay 
-                loop 
-                muted 
-                playsInline 
+              <video
+                autoPlay
+                loop
+                muted
+                playsInline
                 className="w-full h-full object-cover"
-               >
-                 <source src={IMAGES.WEB3_HERO_VIDEO} type="video/mp4" />
-               </video>
-               {/* 50% Black Overlay */}
-               <div className="absolute inset-0 bg-black/50"></div>
+              >
+                <source src={IMAGES.WEB3_HERO_VIDEO} type="video/mp4" />
+              </video>
+              {/* 50% Black Overlay */}
+              <div className="absolute inset-0 bg-black/50"></div>
             </div>
 
             {/* Custom Web3 Navbar */}
             <nav className="relative z-50 flex items-center justify-center w-full px-8 md:px-[120px] py-8">
               {/* Centered Logo & Links */}
               <div className="flex flex-col items-center gap-8">
-                <div 
+                <div
                   className="flex items-center cursor-pointer"
                   onClick={() => navTo('landing')}
                 >
-                  <img 
-                    src={IMAGES.LOGO} 
-                    alt="XRAZOR" 
-                    className="h-[30px] md:h-[35px] w-auto brightness-0 invert" 
+                  <img
+                    src={IMAGES.LOGO}
+                    alt="XRAZOR"
+                    className="h-[30px] md:h-[35px] w-auto brightness-0 invert"
                   />
                 </div>
-                
+
                 {/* <div className="hidden md:flex items-center gap-[40px]">
                   {["Get Started", "Developers", "Features", "Resources"].map((link) => (
                     <button key={link} className="flex items-center gap-[10px] text-white/60 text-[13px] font-medium hover:text-white transition-colors tracking-wide uppercase">
@@ -219,9 +220,9 @@ export default function App() {
             {/* Hero Content */}
             <div className="relative z-10 flex flex-col items-center pt-[220px] md:pt-[280px] pb-[102px] px-6 text-center">
               <div className="flex flex-col items-center gap-10">
-                
+
                 {/* Animated Heading with Gradient */}
-                <motion.h1 
+                <motion.h1
                   variants={itemVariants}
                   className="max-w-[613px] text-[36px] md:text-[56px] font-medium leading-[1.28] tracking-tight bg-clip-text text-transparent"
                   style={{
@@ -232,7 +233,7 @@ export default function App() {
                 </motion.h1>
 
                 {/* Subtitle */}
-                <motion.p 
+                <motion.p
                   variants={itemVariants}
                   className="max-w-[680px] text-[15px] font-normal text-white/70 leading-relaxed -mt-6 px-4"
                 >
@@ -240,7 +241,7 @@ export default function App() {
                 </motion.p>
 
                 {/* Main CTA Button */}
-                <motion.button 
+                <motion.button
                   variants={itemVariants}
                   onClick={() => navTo('selection')}
                   className="relative group transition-transform active:scale-95 mt-12"
@@ -260,8 +261,8 @@ export default function App() {
         )}
 
         {currentScreen === 'selection' && (
-          <motion.div 
-            key="selection" 
+          <motion.div
+            key="selection"
             variants={containerVariants}
             initial="hidden"
             animate="visible"
@@ -272,14 +273,14 @@ export default function App() {
               <motion.h2 variants={itemVariants} className="text-4xl md:text-6xl font-bold mb-16 md:mb-24 tracking-tighter text-center text-reveal">
                 选择您的参访方式
               </motion.h2>
-              
+
               <div className="grid grid-cols-1 md:grid-cols-3 gap-10 pb-20">
                 {[
                   { id: 'driving', icon: Car, label: '驾车前往', sub: 'Driving', desc: '规划路径与停车指引' },
                   { id: 'subway', icon: TrainFront, label: '地铁/班车', sub: 'Subway & Shuttle', desc: '便捷的大型交通中转' },
                   { id: 'ridehailing', icon: Smartphone, label: '网约出租车', sub: 'Ride-Hailing', desc: '点对点精确落地服务' },
                 ].map((item, idx) => (
-                  <motion.button 
+                  <motion.button
                     key={item.id}
                     variants={itemVariants}
                     onClick={() => navTo(item.id as Screen)}
@@ -293,11 +294,11 @@ export default function App() {
                       <div className="text-2xl font-bold mb-4 text-[#333333]">{item.label}</div>
                       <div className="text-sm text-[#666666] leading-relaxed font-light">{item.desc}</div>
                     </div>
-                    
+
                     <div className="mt-10 flex items-center gap-2 text-xs font-bold text-brand group-hover:gap-4 transition-all opacity-0 group-hover:opacity-100 translate-y-4 group-hover:translate-y-0 duration-500">
                       查看指引 <ArrowRight className="w-4 h-4" />
                     </div>
-                    
+
                     {/* Apple-style subtle light sweep on hover */}
                     <div className="absolute inset-0 bg-gradient-to-tr from-white/0 via-white/40 to-white/0 translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-1000 -z-0"></div>
                   </motion.button>
@@ -308,9 +309,9 @@ export default function App() {
         )}
 
         {['driving', 'subway', 'ridehailing'].includes(currentScreen) && (
-          <DetailsScreen 
-            type={currentScreen as any} 
-            onBack={() => navTo('selection')} 
+          <DetailsScreen
+            type={currentScreen as any}
+            onBack={() => navTo('selection')}
             onNext={() => navTo('ending')}
             onShowSchedule={() => setShowSchedule(true)}
             nextBusInfo={nextBusInfo} //
@@ -318,8 +319,8 @@ export default function App() {
         )}
 
         {currentScreen === 'ending' && (
-          <motion.div 
-            key="ending" 
+          <motion.div
+            key="ending"
             variants={containerVariants}
             initial="hidden"
             animate="visible"
@@ -328,7 +329,7 @@ export default function App() {
           >
             <motion.header variants={itemVariants} className="flex justify-between items-center mb-24 max-w-7xl mx-auto w-full">
               <img src={IMAGES.LOGO} alt="XRAZOR" className="h-4 md:h-8" />
-              <button 
+              <button
                 onClick={() => navTo('selection')}
                 className="text-[11px] font-bold tracking-widest uppercase text-brand border border-brand/20 px-4 py-2 rounded-full hover:bg-brand hover:text-white transition-all"
               >
@@ -342,7 +343,7 @@ export default function App() {
                   <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tighter mb-4">您已成功抵达</h2>
                   <div className="text-xl sm:text-2xl text-brand font-medium tracking-tight">玄刃科技智慧园区</div>
                 </motion.div>
-                
+
                 <motion.div variants={itemVariants} className="space-y-8 text-lg sm:text-xl text-[#666666] font-light leading-relaxed">
                   <p>
                     玄刃科技成立于 2020 年，在上海、无锡、南京设有研发和精益生产中心。
@@ -353,9 +354,9 @@ export default function App() {
                 </motion.div>
 
                 <motion.div variants={itemVariants}>
-                   <a 
-                    href="http://www.xr-techs.com" 
-                    target="_blank" 
+                  <a
+                    href="http://www.xr-techs.com"
+                    target="_blank"
                     rel="noreferrer"
                     className="inline-flex items-center gap-3 px-10 py-5 bg-ink text-white rounded-full font-medium hover:bg-brand transition-all shadow-xl shadow-ink/10"
                   >
@@ -365,15 +366,15 @@ export default function App() {
               </div>
 
               <motion.div variants={fadeScaleVariants} className="lg:justify-self-end w-full max-w-md">
-                 <div className="bg-[#fcfcfc] p-12 rounded-2xl border border-gray-100 space-y-10">
-                    <div className="bg-white p-6 rounded-xl shadow-sm inline-block mx-auto flex items-center justify-center">
-                       <img src={IMAGES.QR_CODE} alt="WeChat" className="w-56 h-56" />
-                    </div>
-                    <div className="text-center space-y-3">
-                       <h4 className="text-2xl font-bold text-[#333333]">让我们一起创建你的智慧实验室</h4>
-                       <p className="text-[#999999] text-sm uppercase tracking-widest font-mono">Transform your workflow with AI</p>
-                    </div>
-                 </div>
+                <div className="bg-[#fcfcfc] p-12 rounded-2xl border border-gray-100 space-y-10">
+                  <div className="bg-white p-6 rounded-xl shadow-sm inline-block mx-auto flex items-center justify-center">
+                    <img src={IMAGES.QR_CODE} alt="WeChat" className="w-56 h-56" />
+                  </div>
+                  <div className="text-center space-y-3">
+                    <h4 className="text-2xl font-bold text-[#333333]">让我们一起创建你的智慧实验室</h4>
+                    <p className="text-[#999999] text-sm uppercase tracking-widest font-mono">Transform your workflow with AI</p>
+                  </div>
+                </div>
               </motion.div>
             </main>
 
@@ -392,89 +393,75 @@ export default function App() {
       {/* Schedule Modal */}
       <AnimatePresence>
         {showSchedule && (
-         <motion.div 
-  className="bg-white rounded-[3rem] overflow-hidden max-w-2xl w-full relative flex flex-col max-h-[80vh]"
-  onClick={e => e.stopPropagation()}
->
-  {/* Modal Header */}
-  <div className="p-8 border-b border-gray-50 flex justify-between items-center bg-white sticky top-0">
-    <div>
-      <h5 className="text-2xl font-bold">班车安排表</h5>
-      <p className="text-[10px] text-brand font-bold tracking-widest uppercase">13号线中科路站 ↔ 玄刃科技</p>
-    </div>
-    <button onClick={() => setShowSchedule(false)} className="p-3 bg-gray-100 rounded-full hover:bg-brand hover:text-white transition-all">
-      <ChevronLeft className="w-5 h-5 rotate-[270deg]" />
-    </button>
-  </div>
-
-  {/* Modal Body */}
-  <div className="flex-1 overflow-y-auto p-8 space-y-8">
-    <section>
-      <div className="text-[10px] font-bold text-gray-400 mb-4 tracking-widest uppercase italic">Morning Peaks 早高峰</div>
-      <div className="space-y-4">
-        {SH_DATA.morning.map((m, i) => (
-          <div key={i} className="grid grid-cols-4 gap-2">
-            {m.times.map(t => (
-              <div key={t} className={`py-2 rounded-xl text-center text-sm font-bold border ${nextBusInfo?.time === t ? 'bg-brand text-white border-brand' : 'bg-gray-50 text-gray-600 border-transparent'}`}>
-                {t}
-              </div>
-            ))}
-          </div>
-        ))}
-      </div>
-    </section>
-
-    <div className="grid grid-cols-2 gap-8">
-      <section>
-        <div className="text-[10px] font-bold text-gray-400 mb-4 tracking-widest uppercase italic">Off-Peak 平峰</div>
-        <div className="grid grid-cols-2 gap-2">
-          {SH_DATA.offPeak.map(t => (
-            <div key={t} className={`py-2 rounded-lg text-center text-xs font-mono border ${nextBusInfo?.time === t ? 'bg-brand text-white border-brand' : 'bg-gray-50 text-gray-400 border-transparent'}`}>
-              {t}
-            </div>
-          ))}
-        </div>
-      </section>
-      <section>
-        <div className="text-[10px] font-bold text-gray-400 mb-4 tracking-widest uppercase italic">Evening Peaks 晚高峰</div>
-        <div className="grid grid-cols-2 gap-2">
-          {SH_DATA.evening.map(t => (
-            <div key={t} className={`py-2 rounded-lg text-center text-xs font-mono border ${nextBusInfo?.time === t ? 'bg-brand text-white border-brand' : 'bg-brand/5 text-brand border-brand/20'}`}>
-              {t}
-            </div>
-          ))}
-        </div>
-      </section>
-    </div>
-    
-    <div className="p-6 bg-gray-50 rounded-[2rem] text-[11px] text-gray-400 font-light leading-relaxed">
-      <p>• 运行时间约15分钟，建议提前5分钟候车</p>
-      <p>• 晚高峰 17:30 班次到达中科路后不返回园区</p>
-    </div>
-  </div>
-
-            <motion.div 
-              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[200] flex items-center justify-center bg-black/50 backdrop-blur-sm p-4"
+            onClick={() => setShowSchedule(false)}
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.9, y: 20 }}
-              className="bg-white rounded-[3rem] overflow-hidden max-w-3xl w-full relative group"
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              className="bg-white rounded-[3rem] overflow-hidden max-w-2xl w-full relative flex flex-col max-h-[80vh]"
               onClick={e => e.stopPropagation()}
             >
-              <button 
-                className="absolute top-6 right-6 z-10 bg-black/10 hover:bg-black/80 transition-colors p-3 rounded-full text-white"
-                onClick={() => setShowSchedule(false)}
-              >
-                <ChevronLeft className="w-6 h-6 rotate-180" />
-              </button>
-              <div className="p-1 text-center bg-surface">
-                 <img src={IMAGES.SHUTTLE_SCHEDULE} alt="Schedule" className="w-full h-auto rounded-2xl" />
-              </div>
-              <div className="py-8 px-10 flex justify-between items-center bg-white">
+              {/* Modal Header */}
+              <div className="p-8 border-b border-gray-50 flex justify-between items-center bg-white sticky top-0">
                 <div>
-                   <h5 className="text-xl font-bold mb-1">班车时刻表</h5>
-                   <p className="text-xs text-ink-secondary">SHUTTLE SERVICE TIMETABLE</p>
+                  <h5 className="text-2xl font-bold">班车安排表</h5>
+                  <p className="text-[10px] text-brand font-bold tracking-widest uppercase">13号线中科路站 ↔ 玄刃科技</p>
                 </div>
-                <div className="text-sm font-medium bg-surface px-4 py-2 rounded-full">工作日有效</div>
+                <button onClick={() => setShowSchedule(false)} className="p-3 bg-gray-100 rounded-full hover:bg-brand hover:text-white transition-all">
+                  <ChevronLeft className="w-5 h-5 rotate-[270deg]" />
+                </button>
+              </div>
+
+              {/* Modal Body */}
+              <div className="flex-1 overflow-y-auto p-8 space-y-8">
+                <section>
+                  <div className="text-[10px] font-bold text-gray-400 mb-4 tracking-widest uppercase italic">Morning Peaks 早高峰</div>
+                  <div className="space-y-4">
+                    {SH_DATA.morning.map((m, i) => (
+                      <div key={i} className="grid grid-cols-4 gap-2">
+                        {m.times.map(t => (
+                          <div key={t} className={`py-2 rounded-xl text-center text-sm font-bold border ${nextBusInfo?.time === t ? 'bg-brand text-white border-brand' : 'bg-gray-50 text-gray-600 border-transparent'}`}>
+                            {t}
+                          </div>
+                        ))}
+                      </div>
+                    ))}
+                  </div>
+                </section>
+
+                <div className="grid grid-cols-2 gap-8">
+                  <section>
+                    <div className="text-[10px] font-bold text-gray-400 mb-4 tracking-widest uppercase italic">Off-Peak 平峰</div>
+                    <div className="grid grid-cols-2 gap-2">
+                      {SH_DATA.offPeak.map(t => (
+                        <div key={t} className={`py-2 rounded-lg text-center text-xs font-mono border ${nextBusInfo?.time === t ? 'bg-brand text-white border-brand' : 'bg-gray-50 text-400 border-transparent'}`}>
+                          {t}
+                        </div>
+                      ))}
+                    </div>
+                  </section>
+                  <section>
+                    <div className="text-[10px] font-bold text-gray-400 mb-4 tracking-widest uppercase italic">Evening Peaks 晚高峰</div>
+                    <div className="grid grid-cols-2 gap-2">
+                      {SH_DATA.evening.map(t => (
+                        <div key={t} className={`py-2 rounded-lg text-center text-xs font-mono border ${nextBusInfo?.time === t ? 'bg-brand text-white border-brand' : 'bg-brand/5 text-brand border-brand/20'}`}>
+                          {t}
+                        </div>
+                      ))}
+                    </div>
+                  </section>
+                </div>
+
+                <div className="p-6 bg-gray-50 rounded-[2rem] text-[11px] text-gray-400 font-light leading-relaxed">
+                  <p>• 运行时间约15分钟，建议提前5分钟候车</p>
+                  <p>• 晚高峰 17:30 班次到达中科路后不返回园区</p>
+                </div>
               </div>
             </motion.div>
           </motion.div>
@@ -486,167 +473,118 @@ export default function App() {
 
 // --- Helper Components ---
 
-function DetailsScreen({ type, onBack, onNext, onShowSchedule }: { type: 'driving'|'subway'|'ridehailing', onBack:()=>void, onNext:()=>void, onShowSchedule:()=>void,
-  nextBusInfo: any // }) {
-  const [shuttleStatus, setShuttleStatus] = useState('巴士行驶中');
-
-  // --- 新增：倒计时逻辑 ---
-  const [nextBusInfo, setNextBusInfo] = useState(null);
-
-  useEffect(() => {
-    if (type !== 'subway') return;
-    const calculateNextBus = () => {
-      const now = new Date();
-      if (now.getDay() === 0 || now.getDay() === 6) return; // 周末不计
-
-      const currentTime = now.getHours() * 60 + now.getMinutes();
-      // 展平所有时间点
-      const allTimes = [
-        ...SH_DATA.morning.flatMap(m => m.times),
-        ...SH_DATA.offPeak,
-        ...SH_DATA.evening
-      ];
-
-      const upcoming = allTimes
-        .map(t => {
-          const [h, m] = t.split(':').map(Number);
-          return { string: t, minutes: h * 60 + m };
-        })
-        .find(t => t.minutes > currentTime);
-
-      if (upcoming) {
-        setNextBusInfo({ time: upcoming.string, countdown: upcoming.minutes - currentTime });
-      }
-    };
-
-    calculateNextBus();
-    const timer = setInterval(calculateNextBus, 30000); // 30秒更新一次
-    return () => clearInterval(timer);
-  }, []);
-
-  useEffect(() => {
-    if (type !== 'subway') return;
-    
-    const statuses = [
-      '即将到站 (约 2 分钟)',
-      '巴士行驶中',
-      '即将到站 (约 1 分钟)',
-      '站点等候中...',
-      '巴士行驶中'
-    ];
-    let i = 0;
-    const interval = setInterval(() => {
-      i = (i + 1) % statuses.length;
-      setShuttleStatus(statuses[i]);
-    }, 5000);
-    
-    return () => clearInterval(interval);
-  }, [type]);
+function DetailsScreen({ type, onBack, onNext, onShowSchedule, nextBusInfo }: {
+  type: 'driving' | 'subway' | 'ridehailing',
+  onBack: () => void,
+  onNext: () => void,
+  onShowSchedule: () => void,
+  nextBusInfo: { time: string; countdown: number } | null
+}) {
 
   const handleStartNavigation = () => {
-    // Xuanren Tech coordinates (approximate for Pudong Changfei Rd 186)
-    // Destination address: 上海市浦东新区昌飞路186号
     const destination = encodeURIComponent("上海市浦东新区昌飞路186号玄刃科技");
-    
+    const url = `https://uri.amap.com/marker?position=121.5932,31.2081&name=${destination}`;
+    window.open(url, '_blank');
+  };
 
   const content = {
     driving: {
-       title: "驾车前往",
-       steps: [
-         {
-           tag: "DESTINATION",
-           title: "浦东新区昌飞路 186 号",
-           desc: "请导航至「上海城市网邻」，建议从「城市网邻北門」進入地下室。",
-           img: IMAGES.CAMPUS_MODEL
-         },
-         {
-           tag: "PARKING",
-           title: "建议停至园区地下二层",
-           desc: "入库后请沿指引行驶至3号楼商业区 寻找玄刃科技标识。收费标准：首小时免费，后面10元/小时",
-           img: IMAGES.BASEMENT_ENTRY,
-           highlight: true
-         }
-       ]
+      title: "驾车前往",
+      steps: [
+        {
+          tag: "DESTINATION",
+          title: "浦东新区昌飞路 186 号",
+          desc: "请导航至「上海城市网邻」，建议从「城市网邻北門」進入地下室。",
+          img: IMAGES.CAMPUS_MODEL
+        },
+        {
+          tag: "PARKING",
+          title: "建议停至园区地下二层",
+          desc: "入库后请沿指引行驶至3号楼商业区 寻找玄刃科技标识。收费标准：首小时免费，后面10元/小时",
+          img: [IMAGES.basement, IMAGES.BASEMENT_ENTRY],
+          highlight: true
+        }
+      ]
     },
     subway: {
-       title: "地铁接驳",
-       steps: [
-         {
-           tag: "METRO STATION",
-           title: "13 号线 中科路站",
-           desc: "到达终点站后请由 4 号口出站。出站即可见接驳车站牌。",
-           img: IMAGES.SUBWAY_EXIT
-         },
-          {
-            tag: "SHUTTLE BUS",
-            title: "城市网邻专属接驳车",
-            desc: "认准「浦东公交」与「城市网邻」字样。车次参考时间表。",
-            custom: (
-  <div className="space-y-4">
-    <div className="grid grid-cols-2 gap-4 aspect-video">
-      <div className="bg-surface rounded-3xl flex items-center justify-center p-4">
-        <img src={IMAGES.SHUTTLE_BUS} alt="Bus" className="h-full object-contain" />
-      </div>
-      <div className="bg-surface rounded-3xl overflow-hidden cursor-pointer" onClick={onShowSchedule}>
+      title: "地铁接驳",
+      steps: [
+        {
+          tag: "METRO STATION",
+          title: "13 号线 中科路站",
+          desc: "到达终点站后请由 4 号口出站。出站即可见接驳车站牌。",
+          img: IMAGES.SUBWAY_EXIT
+        },
+        {
+          tag: "SHUTTLE BUS",
+          title: "城市网邻专属接驳车",
+          desc: "认准「浦东公交」与「城市网邻」字样。车次参考时间表。",
+          custom: (
+            <div className="space-y-4">
+              <div className="grid grid-cols-1 gap-4 aspect-video">
+                <div className="bg-surface rounded-3xl flex items-center justify-center p-4">
+                  <img src={IMAGES.SHUTTLE_BUS} alt="Bus" className="h-full object-contain" />
+                </div>
+                {/* <div className="bg-surface rounded-3xl overflow-hidden cursor-pointer" onClick={onShowSchedule}>
         <img src={IMAGES.SHUTTLE_SCHEDULE} alt="Schedule" className="w-full h-full object-cover" />
-      </div>
-    </div>
-    
-    {/* 动态倒计时卡片 */}
-    <div className="flex items-center gap-4 px-6 py-5 bg-brand/5 rounded-[2rem] border border-brand/10">
-      <div className="relative flex">
-        <div className="w-2.5 h-2.5 bg-brand rounded-full"></div>
-        <div className="absolute w-2.5 h-2.5 bg-brand rounded-full animate-ping"></div>
-      </div>
-      <div className="flex-1 flex justify-between items-center">
-        <div className="flex flex-col">
-          <span className="text-[10px] text-brand/60 font-bold uppercase tracking-widest leading-none mb-1">Next Shuttle</span>
-          <span className="text-lg font-bold text-brand font-mono">{nextBusInfo ? nextBusInfo.time : "运营结束"}</span>
-        </div>
-        {nextBusInfo && (
-          <div className="text-right">
-            <div className="text-[10px] text-gray-400 font-bold uppercase mb-1">预计等待</div>
-            <div className="text-2xl font-black text-ink tracking-tighter">
-              {nextBusInfo.countdown}<span className="text-xs ml-1">MIN</span>
+      </div> */}
+              </div>
+
+              {/* 动态倒计时卡片 */}
+              <div className="flex items-center gap-4 px-6 py-5 bg-brand/5 rounded-[2rem] border border-brand/10">
+                <div className="relative flex">
+                  <div className="w-2.5 h-2.5 bg-brand rounded-full"></div>
+                  <div className="absolute w-2.5 h-2.5 bg-brand rounded-full animate-ping"></div>
+                </div>
+                <div className="flex-1 flex justify-between items-center">
+                  <div className="flex flex-col">
+                    <span className="text-[10px] text-brand/60 font-bold uppercase tracking-widest leading-none mb-1">Next Shuttle</span>
+                    <span className="text-lg font-bold text-brand font-mono">{nextBusInfo ? nextBusInfo.time : "运营结束"}</span>
+                  </div>
+                  {nextBusInfo && (
+                    <div className="text-right">
+                      <div className="text-[10px] text-gray-400 font-bold uppercase mb-1">预计等待</div>
+                      <div className="text-2xl font-black text-ink tracking-tighter">
+                        {nextBusInfo.countdown}<span className="text-xs ml-1">MIN</span>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
             </div>
-          </div>
-        )}
-      </div>
-    </div>
-  </div>
-),
-            ),
-            button: { label: "查看班车时刻表", onClick: onShowSchedule }
-          }
-       ]
+          ),
+
+          button: { label: "查看班车时刻表", onClick: onShowSchedule }
+        }
+      ]
     },
     ridehailing: {
-       title: "网约出租车",
-       steps: [
-         {
-           tag: "LOCATION",
-           title: "上海浦东新区张江规划八路",
-           desc: "搜索上述地址或「上海玄刃智能科技」可直接定点至大门。",
-           button: { label: "在地图中定位", onClick: handleStartNavigation }
-         },
-         {
-           tag: "RECOGNITION",
-           title: "白色精神堡垒 Logo",
-           desc: "车辆可直达入口。下车后认准白色精神堡垒地标即可进入大厅。"
-         }
-       ]
+      title: "网约出租车",
+      steps: [
+        {
+          tag: "LOCATION",
+          title: "上海浦东新区张江规划八路",
+          desc: "搜索上述地址或「上海玄刃智能科技」可直接定点至大门。",
+          button: { label: "在地图中定位", onClick: handleStartNavigation }
+        },
+        {
+          tag: "RECOGNITION",
+          title: "白色精神堡垒 Logo",
+          desc: "车辆可直达入口。下车后认准白色精神堡垒地标即可进入大厅。"
+        }
+      ]
     }
   }[type];
 
   return (
-    <motion.div 
+    <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       className="min-h-screen bg-white pb-60"
     >
-      <div className="apple-container pt-32 px-6">
-        <motion.div 
+      <div className="apple-container pt-10 px-6">
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           className="mb-32 text-center"
@@ -656,7 +594,7 @@ function DetailsScreen({ type, onBack, onNext, onShowSchedule }: { type: 'drivin
           <div className="h-1 w-12 bg-brand mx-auto rounded-full opacity-60"></div>
         </motion.div>
         {content.steps.map((step, i) => (
-          <motion.section 
+          <motion.section
             key={i}
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -665,43 +603,96 @@ function DetailsScreen({ type, onBack, onNext, onShowSchedule }: { type: 'drivin
             className={`flex flex-col ${i % 2 !== 0 ? 'lg:flex-row-reverse' : 'lg:flex-row'} gap-16 lg:gap-32 items-center`}
           >
             <div className="flex-1 space-y-10 text-center lg:text-left">
-               <div className="inline-block px-4 py-1.5 bg-surface rounded-full text-[10px] font-bold tracking-[0.2em] text-ink-secondary mb-2">{step.tag}</div>
-               <h3 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight leading-tight">{step.title}</h3>
-               <p className="text-base sm:text-lg md:text-xl text-ink-secondary font-light leading-relaxed max-w-xl mx-auto lg:mx-0">{step.desc}</p>
-               {step.button && (
-                 <button 
+
+              <div className="inline-block px-4 py-1.5 bg-surface rounded-full text-[10px] font-bold tracking-[0.2em] text-ink-secondary mb-2">{step.tag}</div>
+              <h3 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight leading-tight">{step.title}</h3>
+              <p className="text-base sm:text-lg md:text-xl text-ink-secondary font-light leading-relaxed max-w-xl mx-auto lg:mx-0">{step.desc}</p>
+              {step.button && (
+                <button
                   onClick={step.button.onClick}
                   className="flex items-center gap-2 text-brand font-semibold border-b-2 border-brand/20 pb-1 hover:border-brand transition-all mx-auto lg:mx-0"
-                 >
-                   {step.button.label} <ArrowRight className="w-4 h-4" />
-                 </button>
-               )}
+                >
+                  {step.button.label} <ArrowRight className="w-4 h-4" />
+                </button>
+              )}
             </div>
 
+            {/* <div className="flex-1 w-full max-w-xl">
+              {step.custom ? (
+                <div className="w-full">{step.custom}</div>
+              ) : step.img ? (
+                <div className="relative rounded-[1rem] overflow-hidden shadow-2xl bg-black">
+                  <img src={step.img} alt="guide" className="w-full aspect-[1412/833] object-cover opacity-90 transition-transform duration-[2s] hover:scale-105" />
+                  {step.highlight && (
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <div className="w-1/3 aspect-square border-2 border-white/40 rounded-full animate-ping"></div>
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <div className="w-full aspect-square bg-surface rounded-[3rem] flex items-center justify-center border border-black/[0.02]">
+                  <Navigation className="w-20 h-20 text-brand/20" />
+                </div>
+              )}
+            </div> */}
             <div className="flex-1 w-full max-w-xl">
-               {step.custom ? (
-                 <div className="w-full">{step.custom}</div>
-               ) : step.img ? (
-                 <div className="relative rounded-[3rem] overflow-hidden shadow-2xl bg-black">
-                   <img src={step.img} alt="guide" className="w-full aspect-[4/3] object-cover opacity-90 transition-transform duration-[2s] hover:scale-105" />
-                   {step.highlight && (
-                     <div className="absolute inset-0 flex items-center justify-center">
-                        <div className="w-1/3 aspect-square border-2 border-white/40 rounded-full animate-ping"></div>
-                     </div>
-                   )}
-                 </div>
-               ) : (
-                 <div className="w-full aspect-square bg-surface rounded-[3rem] flex items-center justify-center border border-black/[0.02]">
-                    <Navigation className="w-20 h-20 text-brand/20" />
-                 </div>
-               )}
+              {step.custom ? (
+                <div className="w-full">{step.custom}</div>
+              ) : step.img ? (
+                /* 使用 flex-col 容器来承载可能的一张或多张图片 */
+                <div className="flex flex-col gap-6 w-full">
+                  {(Array.isArray(step.img) ? step.img : [step.img]).map((imgSrc, idx) => {
+                    // 根据图片路径动态匹配你要求的比例
+                    let aspectRatio = "1412 / 833"; // 默认比例
+                    if (imgSrc === IMAGES.BASEMENT_ENTRY) {
+                      aspectRatio = "1613 / 1118";
+                    } else if (imgSrc === IMAGES.basement) {
+                      aspectRatio = "719 / 506";
+                    } else if (imgSrc === IMAGES.CAMPUS_MODEL) {
+                      aspectRatio = "1412 / 833";
+                    }
+
+                    return (
+                      <div
+                        key={idx}
+                        className="relative rounded-[1rem] overflow-hidden shadow-2xl bg-black w-full"
+                        style={{ aspectRatio: aspectRatio }}
+                      >
+                        <img
+                          src={imgSrc}
+                          alt={`guide-${idx}`}
+                          className="w-full h-full object-cover opacity-90 transition-transform duration-[2s] hover:scale-105"
+                        />
+
+                        {/* 只有在配置了 highlight 且是第一张图（或所有图）时显示动画 */}
+                        {step.highlight && (
+                          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                            <div className="w-1/3 aspect-square border-2 border-white/40 rounded-full animate-ping"></div>
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              ) : (
+                <div className="w-full aspect-square bg-surface rounded-[3rem] flex items-center justify-center border border-black/[0.02]">
+                  <Navigation className="w-20 h-20 text-brand/20" />
+                </div>
+              )}
             </div>
           </motion.section>
         ))}
       </div>
 
-      <footer className="fixed bottom-12 left-0 right-0 flex justify-center z-40 px-6">
-        <button 
+      <footer className="fixed bottom-12 left-0 right-0 flex justify-center z-40 px-6 gap-4">
+        <button
+          onClick={onBack}
+          className="group px-6 py-3 bg-white text-ink border-2 border-ink/10 rounded-full font-semibold  hover:bg-ink hover:text-white transition-all shadow-lg active:scale-95 flex items-center gap-2 text-lg"
+        >
+          <ChevronLeft className="w-4 h-4 transition-transform group-hover:-translate-x-1" />
+          返回
+        </button>
+        <button
           onClick={onNext}
           className="group px-16 py-6 bg-ink text-white rounded-full font-bold tracking-tight text-lg hover:bg-brand transition-all shadow-2xl active:scale-95 flex items-center gap-4"
         >
