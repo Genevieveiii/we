@@ -408,8 +408,7 @@ export default function App() {
       <p>• 晚高峰 17:30 班次到达中科路后不返回园区</p>
     </div>
   </div>
-</motion.div>
-          >
+
             <motion.div 
               initial={{ opacity: 0, scale: 0.9, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
