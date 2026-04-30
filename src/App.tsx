@@ -30,17 +30,50 @@ const IMAGES = {
   // LOGO: '白.png',
   // LOGO: Logo,
   LOGO: '/images/白.png',
-  CAMPUS_MODEL: '/images/汽车指引.png',
-  BASEMENT_ENTRY: '/images/地图指引.png',
-  SHUTTLE_BUS: '/images/地铁指引.png',
-  SUBWAY_EXIT: '/images/班车下车后指引.png',
-  SHUTTLE_SCHEDULE: '/images/班车下车后指引.png',
-  basement: '/images/车库入口.png',
-  // QR_CODE: 'input_file_6.png',
-  // QR_CODE: ICON,
   QR_CODE: '/images/20260422-150401.jpeg',
-  PRODUCT_SHOW: 'https://images.unsplash.com/photo-1581092580497-e0d23cbdf1dc?auto=format&fit=crop&q=80&w=1000',
-  WEB3_HERO_VIDEO: 'https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260217_030345_246c0224-10a4-422c-b324-070b7c0eceda.mp4'
+  WEB3_HERO_VIDEO: 'https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260217_030345_246c0224-10a4-422c-b324-070b7c0eceda.mp4',
+
+
+
+  // SHUTTLE_SCHEDULE: '/images/班车下车后指引.png',
+  // basement: '/images/车库入口.png',
+
+
+
+  //--------------地铁/班车-------------------------
+  SUBWAY_EXIT: '/images/地铁/地铁口_.png',
+  //班车.png
+  SUBWAY_BUS: '/images/地铁/班车.png',
+  //落客点.png
+  SUBWAY_DROP_OFF: '/images/地铁/落客点.png',
+  //地铁下车.png
+  SUBWAY_EXITING: '/images/地铁/地铁下车.png',
+  //班车走路.png
+  SUBWAY_WALKING: '/images/地铁/班车走路.png',
+  //--------------地铁-----------------------------
+
+  //---------------自驾-------------------------
+  CAMPUS_MODEL: '/images/自驾/自驾.png',
+  BASEMENT_ENTRY: '/images/地图指引.png',
+
+  //昌飞路右转.png
+  BASEMENT_TURN_RIGHT: '/images/自驾/昌飞路右转.png',
+  //班车右转.png
+  BASEMENT_TURN_RIGHT_SHUTTLE: '/images/自驾/班车右转.png',
+  //班车下车.png
+  BASEMENT_SHUTTLE_EXIT: '/images/自驾/班车下车.png',
+  //车库入口.png
+  BASEMENT_ENTRY_GATE: '/images/自驾/车库入口.png',
+  //地图.png
+  BASEMENT_MAP: '/images/自驾/地图.png',
+  //---------------自驾-------------------------
+
+  //----------------网约车-----------------------
+  //下客店.png
+  RIDE_HAILING_DROP_OFF: '/images/网约车/下客店.png',
+  //正门.png
+  RIDE_HAILING_ENTRANCE: '/images/网约车/正门.png',
+  //----------------网约车-----------------------
 };
 
 type Screen = 'landing' | 'selection' | 'driving' | 'subway' | 'ridehailing' | 'ending';
@@ -371,8 +404,9 @@ export default function App() {
                     <img src={IMAGES.QR_CODE} alt="WeChat" className="w-56 h-56" />
                   </div>
                   <div className="text-center space-y-3">
-                    <h4 className="text-2xl font-bold text-[#333333]">让我们一起创建你的智慧实验室</h4>
-                    <p className="text-[#999999] text-sm uppercase tracking-widest font-mono">Transform your workflow with AI</p>
+                    <h4 className="text-2xl font-bold text-[#333333]">让我们一起探索你的
+                      智慧实验室</h4>
+                    <p className="text-[#999999] text-sm uppercase tracking-widest font-mono">Ready to start your journey with XRAZOR?</p>
                   </div>
                 </div>
               </motion.div>
@@ -494,14 +528,21 @@ function DetailsScreen({ type, onBack, onNext, onShowSchedule, nextBusInfo }: {
         {
           tag: "DESTINATION",
           title: "浦东新区昌飞路 186 号",
-          desc: "请导航至「上海城市网邻」，建议从「城市网邻北門」進入地下室。",
-          img: IMAGES.CAMPUS_MODEL
+          desc: "请导航至「上海城市网邻」，建议从「城市网邻北门」進入地下室。",
+          button: { label: "在地图中定位", onClick: handleStartNavigation },
+          img: [{ url: IMAGES.CAMPUS_MODEL, size: "1412 / 833" }]
         },
         {
           tag: "PARKING",
           title: "建议停至园区地下二层",
           desc: "入库后请沿指引行驶至3号楼商业区 寻找玄刃科技标识。收费标准：首小时免费，后面10元/小时",
-          img: [IMAGES.basement, IMAGES.BASEMENT_ENTRY],
+          img: [
+            { url: IMAGES.BASEMENT_TURN_RIGHT, size: "1320  / 871" },
+            { url: IMAGES.BASEMENT_TURN_RIGHT_SHUTTLE, size: "1325   / 845" },
+            { url: IMAGES.BASEMENT_SHUTTLE_EXIT, size: "1320 / 821" },
+            { url: IMAGES.BASEMENT_ENTRY_GATE, size: "719 / 506" },
+            { url: IMAGES.BASEMENT_MAP, size: "2084  / 1369" }
+          ],
           highlight: true
         }
       ]
@@ -513,7 +554,9 @@ function DetailsScreen({ type, onBack, onNext, onShowSchedule, nextBusInfo }: {
           tag: "METRO STATION",
           title: "13 号线 中科路站",
           desc: "到达终点站后请由 4 号口出站。出站即可见接驳车站牌。",
-          img: IMAGES.SUBWAY_EXIT
+          img: [
+            { url: IMAGES.SUBWAY_EXIT, size: "1345 / 1608" },
+          ],
         },
         {
           tag: "SHUTTLE BUS",
@@ -521,15 +564,6 @@ function DetailsScreen({ type, onBack, onNext, onShowSchedule, nextBusInfo }: {
           desc: "认准「浦东公交」与「城市网邻」字样。车次参考时间表。",
           custom: (
             <div className="space-y-4">
-              <div className="grid grid-cols-1 gap-4 aspect-video">
-                <div className="bg-surface rounded-3xl flex items-center justify-center p-4">
-                  <img src={IMAGES.SHUTTLE_BUS} alt="Bus" className="h-full object-contain" />
-                </div>
-                {/* <div className="bg-surface rounded-3xl overflow-hidden cursor-pointer" onClick={onShowSchedule}>
-        <img src={IMAGES.SHUTTLE_SCHEDULE} alt="Schedule" className="w-full h-full object-cover" />
-      </div> */}
-              </div>
-
               {/* 动态倒计时卡片 */}
               <div className="flex items-center gap-4 px-6 py-5 bg-brand/5 rounded-[2rem] border border-brand/10">
                 <div className="relative flex">
@@ -551,6 +585,23 @@ function DetailsScreen({ type, onBack, onNext, onShowSchedule, nextBusInfo }: {
                   )}
                 </div>
               </div>
+              <div className="grid grid-cols-1 gap-4 aspect-video">
+                <div className="bg-surface rounded-3xl flex items-center justify-center p-4">
+                  <img src={IMAGES.SUBWAY_BUS} alt="Bus" className="h-full object-contain" />
+                </div>
+                <p style={{ fontSize: '0.875rem', lineHeight: '1.5', textAlign: 'center', fontWeight: 'bold' }}>到达园区北门下车后按图示路线即可找到公司大门</p>
+                <div className="bg-surface rounded-3xl flex items-center justify-center p-4">
+                  <img src={IMAGES.SUBWAY_DROP_OFF} alt="Bus" className="h-full object-contain" />
+                </div>
+                <div className="bg-surface rounded-3xl flex items-center justify-center p-4">
+                  <img src={IMAGES.SUBWAY_EXITING} alt="Bus" className="h-full object-contain" />
+                </div>
+                <div className="bg-surface rounded-3xl flex items-center justify-center p-4">
+                  <img src={IMAGES.SUBWAY_WALKING} alt="Bus" className="h-full object-contain" />
+                </div>
+              </div>
+
+
             </div>
           ),
 
@@ -565,12 +616,18 @@ function DetailsScreen({ type, onBack, onNext, onShowSchedule, nextBusInfo }: {
           tag: "LOCATION",
           title: "上海浦东新区张江规划八路",
           desc: "搜索上述地址或「上海玄刃智能科技」可直接定点至大门。",
-          button: { label: "在地图中定位", onClick: handleStartNavigation }
+          button: { label: "在地图中定位", onClick: handleStartNavigation },
+          img: [
+            { url: IMAGES.RIDE_HAILING_ENTRANCE, size: "1390  / 931" },
+          ],
         },
         {
           tag: "RECOGNITION",
           title: "白色精神堡垒 Logo",
-          desc: "车辆可直达入口。下车后认准白色精神堡垒地标即可进入大厅。"
+          desc: "车辆可直达入口。下车后认准白色精神堡垒地标即可进入大厅。",
+          img: [
+            { url: IMAGES.RIDE_HAILING_DROP_OFF, size: "1317  / 928" },
+          ],
         }
       ]
     }
@@ -604,7 +661,7 @@ function DetailsScreen({ type, onBack, onNext, onShowSchedule, nextBusInfo }: {
           >
             <div className="flex-1 space-y-10 text-center lg:text-left">
 
-              <div className="inline-block px-4 py-1.5 bg-surface rounded-full text-[10px] font-bold tracking-[0.2em] text-ink-secondary mb-2">{step.tag}</div>
+              <div className="inline-block px-4 py-1.5 bg-surface rounded-full text-[10px] font-bold tracking-[0.2em] text-ink-secondary mb-2 mt-10">{step.tag}</div>
               <h3 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight leading-tight">{step.title}</h3>
               <p className="text-base sm:text-lg md:text-xl text-ink-secondary font-light leading-relaxed max-w-xl mx-auto lg:mx-0">{step.desc}</p>
               {step.button && (
@@ -642,24 +699,14 @@ function DetailsScreen({ type, onBack, onNext, onShowSchedule, nextBusInfo }: {
                 /* 使用 flex-col 容器来承载可能的一张或多张图片 */
                 <div className="flex flex-col gap-6 w-full">
                   {(Array.isArray(step.img) ? step.img : [step.img]).map((imgSrc, idx) => {
-                    // 根据图片路径动态匹配你要求的比例
-                    let aspectRatio = "1412 / 833"; // 默认比例
-                    if (imgSrc === IMAGES.BASEMENT_ENTRY) {
-                      aspectRatio = "1613 / 1118";
-                    } else if (imgSrc === IMAGES.basement) {
-                      aspectRatio = "719 / 506";
-                    } else if (imgSrc === IMAGES.CAMPUS_MODEL) {
-                      aspectRatio = "1412 / 833";
-                    }
-
                     return (
                       <div
                         key={idx}
-                        className="relative rounded-[1rem] overflow-hidden shadow-2xl bg-black w-full"
-                        style={{ aspectRatio: aspectRatio }}
+                        className="relative rounded-[1rem] overflow-hidden shadow-2xl bg-black1 w-full"
+                        style={{ aspectRatio: imgSrc.size }}
                       >
                         <img
-                          src={imgSrc}
+                          src={imgSrc.url}
                           alt={`guide-${idx}`}
                           className="w-full h-full object-cover opacity-90 transition-transform duration-[2s] hover:scale-105"
                         />
@@ -687,14 +734,14 @@ function DetailsScreen({ type, onBack, onNext, onShowSchedule, nextBusInfo }: {
       <footer className="fixed bottom-12 left-0 right-0 flex justify-center z-40 px-6 gap-4">
         <button
           onClick={onBack}
-          className="group px-6 py-3 bg-white text-ink border-2 border-ink/10 rounded-full font-semibold  hover:bg-ink hover:text-white transition-all shadow-lg active:scale-95 flex items-center gap-2 text-lg"
+          className="group px-4 py-4 bg-white text-ink border-2 border-ink/10 rounded-full font-semibold  hover:bg-ink hover:text-white transition-all shadow-lg active:scale-95 flex items-center gap-2 text-sm"
         >
           <ChevronLeft className="w-4 h-4 transition-transform group-hover:-translate-x-1" />
           返回
         </button>
         <button
           onClick={onNext}
-          className="group px-16 py-6 bg-ink text-white rounded-full font-bold tracking-tight text-lg hover:bg-brand transition-all shadow-2xl active:scale-95 flex items-center gap-4"
+          className="group px-8 py-4 bg-ink text-white rounded-full font-bold tracking-tight text-lg hover:bg-brand transition-all shadow-2xl active:scale-95 flex items-center gap-4 text-sm"
         >
           我已到达 <ArrowRight className="w-6 h-6 transition-transform group-hover:translate-x-2" />
         </button>
