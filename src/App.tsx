@@ -232,11 +232,11 @@ export default function App() {
                   className="flex items-center cursor-pointer"
                   onClick={() => navTo('landing')}
                 >
-                  <img
+                  {/* <img
                     src={IMAGES.LOGO}
                     alt="XRAZOR"
                     className="h-[30px] md:h-[35px] w-auto brightness-0 invert"
-                  />
+                  /> */}
                 </div>
 
                 {/* <div className="hidden md:flex items-center gap-[40px]">
